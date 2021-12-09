@@ -123,9 +123,9 @@ const NavList = ({ menu, setMenu, count }) => {
           <OtherLink to='/profile' onClick={() => setMenu(false)}>
           Profile
         </OtherLink>
-        {/* <OtherLink to='/profile/address' onClick={() => setMenu(false)}>
-        Shipping Locations
-      </OtherLink> */}
+        <OtherLink to='/change-password' onClick={() => setMenu(false)}>
+        Change Password
+      </OtherLink>
         </>
       )}
        <Icon>
@@ -161,9 +161,9 @@ const NavList = ({ menu, setMenu, count }) => {
                 <DropItem>
                   <DropLink to='/profile'>Profile</DropLink>
                 </DropItem>
-                {/* <DropItem>
-                  <DropLink to='/profile/address'>Shipping Locations</DropLink>
-                </DropItem> */}
+                <DropItem>
+                  <DropLink to='/change-password'>Change Password</DropLink>
+                </DropItem>
                 <DropItem onClick={logoutHandler}>
                   <DropLink to='#'>Logout</DropLink>
                 </DropItem>

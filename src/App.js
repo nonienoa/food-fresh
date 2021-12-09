@@ -27,6 +27,7 @@ import ProductCategories from './components/products/ProductCategories'
 import ProductsShowcase from './components/products/ProductsShowcase'
 import ShippingLocations from './screens/ShippingLocations'
 import ForgotPassword from './screens/ForgotPassword'
+import ChangePassword from './screens/ChangePassword'
 // import InfoTabs from './screens/InfoTabs'
 
 const Grid = styled.div`
@@ -69,6 +70,8 @@ function App() {
           <Route path='/forgot-password' component={ForgotPassword} /> 
 
           <Route path='/profile/address' component={ShippingLocations} /> 
+          <Route path='/change-password' component={ChangePassword} /> 
+
 
           {/* <Route path='/profile' component={InfoTabs} />  */}
 
