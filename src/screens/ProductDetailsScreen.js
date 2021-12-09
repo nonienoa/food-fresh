@@ -247,7 +247,7 @@ const ProductDetailsScreen = ({ match }) => {
                           <LazyLoadImage
                             effect="blur"
                             src={item.images[0].imageName}
-                            alt="jjj"
+                            alt={item.title}
                             placeholderSrc={loadingImg}
                           />
                         </Main>
@@ -263,10 +263,10 @@ const ProductDetailsScreen = ({ match }) => {
                       </Left>
 
                       <Right>
-                        <CatLabel>Home/Product Details</CatLabel>
+                        <CatLabel> Product Details | {item.title}</CatLabel>
                         <Title>{item.title}</Title>
                         <Rating value={4} />
-                        {/* <Price>${productDetail.price}</Price> */}
+                        <Price>Rs. {item.unitPrice[0].sellingPrice}</Price>
 
                         {/* {
                           accessToken && accessToken !== 'undefined' ? (<
@@ -311,14 +311,14 @@ const ProductDetailsScreen = ({ match }) => {
                           <Main>
                             <LazyLoadImage
                               src={loadingImg}
-                              alt="jjj"
+                              alt="loading"
                               placeholderSrc={loadingImg}
                             />
                           </Main>
                         </Left>
                         <Right>
-                          <CatLabel>Home/T-shirt</CatLabel>
-                          <Title>LOading..</Title>
+                          <CatLabel>Product Details</CatLabel>
+                          <Title>Loading...</Title>
                           <Rating value={4} />
                         </Right>
             </ProductDetails>

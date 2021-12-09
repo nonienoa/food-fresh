@@ -75,30 +75,6 @@ export const NavDropLink = styled(Link)`
     font-size: 1.5rem;
   }
 `
-
-export const NavMegaMenu = styled.div`
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  top: 8.5rem;
-  left: 0;
-  width: 100%;
-  padding: 0 3rem;
-  background-color: var(--white);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 300ms ease;
-
-  @media (max-width: 996px) {
-    position: static;
-    top: 6.5rem;
-    padding: 0 2rem;
-    opacity: 1;
-    visibility: visible;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 300ms ease;
-  }
-`
 export const NavContent = styled.div`
   padding: 2.5rem 2rem;
   display: flex;
@@ -177,11 +153,7 @@ export const NavItemWrapper = styled.li`
     top: 6.5rem;
   }
 
-  :hover ${NavMegaMenu} {
-    opacity: 1;
-    visibility: visible;
-    top: 6.5rem;
-  }
+  
 
   @media (max-width: 996px) {
     margin: 1.5rem 1rem;
@@ -191,7 +163,7 @@ export const NavItemWrapper = styled.li`
 export const NavInput = styled.input`
   display: none;
 
-  :checked ~ ${NavDropMenu},:checked ~ ${NavMegaMenu} {
+  :checked ~ ${NavDropMenu} {
     max-height: 100%;
   }
 `

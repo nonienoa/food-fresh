@@ -177,7 +177,7 @@ const Products = () => {
                     {item.title}
                   </ProductLink>
                   <Price>
-                    <PriceLabel>${item.unitPrice[0].sellingPrice}</PriceLabel>
+                    <PriceLabel>Rs. {item.unitPrice[0].sellingPrice}</PriceLabel>
                   </Price>
                 </Bottom>
               </ProductItem>  

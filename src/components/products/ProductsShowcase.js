@@ -31,14 +31,7 @@ const ProductsShowcase = () => {
   const productsData = useSelector((state) => state.allProducts);
   const { isLoaded, products } = productsData;
 
-  // isLoaded && setmainData(products)
-  
 
-  // const filterProducts = (sort, products, categorySlug) => {
-  //   return(
-  //       products.filter((prod) => prod.categorySlug === categorySlug)
-  //   )
-  // }
 
   const filterProducts = (sort, products, categorySlug) => {
    if(sort === 'default'){
@@ -133,7 +126,7 @@ const ProductsShowcase = () => {
                                         <div className="bottom">
                                           <Link to={`/product-details/${item.slug}`}>{item.title}</Link>
                                           <div className="price">
-                                            <span>${item.unitPrice[0].sellingPrice}</span>
+                                            <span>Rs. {item.unitPrice[0].sellingPrice}</span>
                                           </div>
                                         </div>
                                       </div>

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import 'react-notifications-component/dist/theme.css'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import 'react-toastify/dist/ReactToastify.css'
-
+import { useLocation } from 'react-router-dom';
 import HomeScreen from './screens/HomeScreen'
 import ProductDetailsScreen from './screens/ProductDetailsScreen'
 import Cart from './screens/CartScreen'
@@ -44,9 +44,11 @@ const Main = styled.main`
 `
 
 function App() {
+  const { pathname } = useLocation();
+
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
@@ -55,6 +57,7 @@ function App() {
       <Grid>
         <Navigation />
         <Main>
+          <Route exact path='/' component={HomeScreen} />
           <Route path='/product-details/:productSlug' component={ProductDetailsScreen} />
           {/* <Route path='/products/category/:categorySlug' component={ShowProducts} /> */}
           <Route path='/products/category/:categorySlug' component={ProductsShowcase} />
@@ -75,7 +78,7 @@ function App() {
 
           {/* <Route path='/profile' component={InfoTabs} />  */}
 
-          <Route exact path='/' component={HomeScreen} />
+          
         </Main>
         <Footer />
       </Grid>

@@ -17,8 +17,9 @@ const HomeScreen = () => {
       <Collection />
       
       <Products />
-      {/* <NewDishes/> */}
       <FreeDelivery/>
+
+      <NewDishes/>
       <Deals/>
     </>
   )
