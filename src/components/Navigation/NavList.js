@@ -45,22 +45,8 @@ const NavList = ({ menu, setMenu, count }) => {
 
   const categoriesData = useSelector(state => state.allCategories)
   const { categories , isLoaded } = categoriesData
-  // const { userInfo } = userLogin
-  // const userInfo = false;
 
-  // const userInfo = (accessToken) => {
-  //     if (accessToken && accessToken !== 'undefined'){
-  //     return false
-  //   } 
-  //   else if(!accessToken || accessToken === 'undefined'){
-  //     return true
-  //   }
-  //   else {
-  //     return false
-  //   }
-  // }
-  // const loggedIn = userInfo()
-  // console.log("sdfsdf", loggedIn)
+
 
   console.log(categories, isLoaded)
   const cartItems = localStorage.getItem('cartItems')
@@ -133,9 +119,9 @@ const NavList = ({ menu, setMenu, count }) => {
           accessToken && accessToken !== 'undefined' ? (
             <LinkWrapper to='/cart'>
               <img src='/images/shoppingBag.svg' alt='' />
-              {/* <small className='count d-flex'>
-                {count ? count : cartItems.reduce((acc, item) => acc + item.qty, 0)}
-              </small> */}
+              <small className='count d-flex'>
+              {count}
+              </small>
             </LinkWrapper>) : (
 
                   

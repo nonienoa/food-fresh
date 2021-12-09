@@ -18,6 +18,7 @@ import {
   LinkWrapper,
 } from "./styles/Navigation/Navigation.styled";
 import Searchbar from './Navigation/Searchbar';
+import { fetchAllCart } from '../redux/actions/allCartActions';
 
 
 const Navigation = () => {
@@ -27,6 +28,7 @@ const Navigation = () => {
   const [cookies, removeCookie] = useCookies();
   let accessToken = cookies.access_token;
 
+  const dispatch = useDispatch()
   const history =useHistory()
   const [allProducts, setAllProducts] = useState([]);
   const [warehouse, setWarehouse] = useState('')
@@ -56,8 +58,16 @@ const Navigation = () => {
         fetchAllProducts();
     }, [])
 
+    useEffect(() => {
+    
+      dispatch(fetchAllCart(accessToken))
+    }, [dispatch, accessToken])
 
-    console.log(allProducts)
+    const cartData = useSelector(state => state.allCart)
+    const { cartItems , isLoaded } = cartData
+
+   isLoaded &&  console.log(cartItems.cartProducts.length, "cart")
+    // console.log(allProducts)
 
   const cart = useSelector(state => state.cart)
   // const { cartItems } = cart
@@ -115,7 +125,7 @@ const Navigation = () => {
         </LogoWrapper>
         
 
-        <NavList menu={menu} setMenu={setMenu} count={2} />
+        <NavList menu={menu} setMenu={setMenu} count={isLoaded && cartItems.cartProducts.length} />
         <div className='right'>
           
         {
@@ -134,9 +144,9 @@ const Navigation = () => {
                 accessToken && accessToken !== 'undefined' ? (
                   <LinkWrapper to='/cart'>
                     <img src='/images/shoppingBag.svg' alt='' />
-                    {/* <small className='count d-flex'>
-                      0
-                    </small> */}
+                    <small className='count d-flex'>
+                      {isLoaded && cartItems.cartProducts.length}
+                    </small>
                   </LinkWrapper>
                 ): (
                   <LinkWrapper onClick={(e) => {toast.info('Please Login to view Cart')}}>
