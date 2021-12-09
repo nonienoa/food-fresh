@@ -102,16 +102,16 @@ const HeroLink = styled(Link)`
 const Hero = () => {
   const data = [
     {
-      image: "https://uat.ordering-boafresh.ekbana.net/storage/uploads/banner/6155789e8b993.png",
-      caption: "San Francisco"
+      image: "https://uat.ordering-boafresh.ekbana.net/storage/Banner/619b229618f8b.png",
+      caption: ""
     },
     {
-      image: "https://uat.ordering-boafresh.ekbana.net/storage/uploads/banner/61937a7418988.jpg",
-      caption: "Scotland"
+      image: "https://uat.ordering-boafresh.ekbana.net/storage/Banner/619b22a1b0d19.jpg",
+      caption: ""
     },
     {
-      image: "https://uat.ordering-boafresh.ekbana.net/storage/uploads/banner/619df4838fefa.jpg",
-      caption: "Darjeeling"
+      image: "https://uat.ordering-boafresh.ekbana.net/storage/Banner/619b229618f8b.png",
+      caption: ""
     }
   ]
   const captionStyle = {
@@ -124,19 +124,14 @@ const Hero = () => {
   }
   return (
     <Wrapper>
-
-        <h2>React Carousel Minimal</h2>
-        <p>Easy to use, responsive and customizable carousel component for React Projects.</p>
-        <div style={{
-          padding: "0 20px"
-        }}>
+        <div >
           <Carousel
             data={data}
             time={2000}
             width="100%"
             height="650px"
             captionStyle={captionStyle}
-            slideNumber={true}
+            slideNumber={false}
             slideNumberStyle={slideNumberStyle}
             captionPosition="bottom"
             automatic={true}

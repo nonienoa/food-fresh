@@ -20,6 +20,14 @@ import PaymentScreen from './screens/PaymentScreen'
 import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
 import ProductComponent from './components/try'
+import Searchbar from './components/Navigation/Searchbar'
+import ShowProducts from './components/products/ShowProducts'
+import tryl from './components/Navigation/tryl'
+import ProductCategories from './components/products/ProductCategories'
+import ProductsShowcase from './components/products/ProductsShowcase'
+import ShippingLocations from './screens/ShippingLocations'
+import ForgotPassword from './screens/ForgotPassword'
+// import InfoTabs from './screens/InfoTabs'
 
 const Grid = styled.div`
   position: relative;
@@ -46,15 +54,24 @@ function App() {
       <Grid>
         <Navigation />
         <Main>
-          <Route path='/product/:id' component={ProductDetailsScreen} />
-          {/* <Route path='/cart/:id?' component={Cart} />
+          <Route path='/product-details/:productSlug' component={ProductDetailsScreen} />
+          {/* <Route path='/products/category/:categorySlug' component={ShowProducts} /> */}
+          <Route path='/products/category/:categorySlug' component={ProductsShowcase} />
+
+          <Route path='/cart/:id?' component={Cart} />
           <Route path='/shipping' component={ShippingScreen} />
           <Route path='/payment' component={PaymentScreen} />
           <Route path='/placeorder' component={PlaceOrderScreen} />
           <Route path='/orders/:id' component={OrderScreen} />
           <Route path='/login' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />
-          <Route path='/profile' component={ProfileScreen} /> */}
+          <Route path='/profile' component={ProfileScreen} /> 
+          <Route path='/forgot-password' component={ForgotPassword} /> 
+
+          <Route path='/profile/address' component={ShippingLocations} /> 
+
+          {/* <Route path='/profile' component={InfoTabs} />  */}
+
           <Route exact path='/' component={HomeScreen} />
         </Main>
         <Footer />

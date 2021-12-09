@@ -1,15 +1,22 @@
-import React, { useEffect } from 'react'
+import React, {useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import { useCookies } from 'react-cookie';
+// import { useHistory } from 'react-router-dom';
+import adImage from "../../backpack.jpg";
 import styled from 'styled-components'
-
+// import { Modal } from 'react-bootstrap';
+import './prod.css'
 import Title from '../Title'
 import { listProducts } from '../../redux/actions/productActions'
 import Alert from '../Alert'
 import Message from '../Message'
 import CustomLoader from '../../components/CustomLoader'
-import { addToCart } from '../../actions/cartActions'
+// import { addToCart } from '../../actions/cartActions'
 import { toast } from 'react-toastify'
+import { addToCart } from '../Functions/cart';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const Wrapper = styled.div`
   display: grid;
@@ -85,10 +92,24 @@ const PriceLabel = styled.span`
 
 const Price = styled.div``
 
+
+
+
 const Products = () => {
+  const [cookies, removeCookie] = useCookies();
+  let accessToken = cookies.access_token;
+  // console.log("YOhi aa", accessToken)
+  const history = useHistory()
+
   const dispatch = useDispatch()
 
+  const loginToContinue = (e) => {
+    toast.info('Login to add to Cart')
+    history.push('/login')
+  }
   const qty = 1
+  
+  const cartLoaded = true;
 
   const mainData = useSelector(state => state.allHome)
   const { loading, error, homeData } = mainData
@@ -130,7 +151,8 @@ const Products = () => {
           <Message type='warning' message={error} />{' '}
         </>
       ) : (
-        <Wrapper>
+
+          <Wrapper>
           { !loading &&
             homeData &&
             homeData[2] &&
@@ -138,12 +160,16 @@ const Products = () => {
             (homeData[2].sectionDetails.products).map((item) => (
               <ProductItem key={item.id}>
                 <ImgContainer>
-                  <Link to={`/product/${item.id}`}>
+                  <Link to={`/product-details/${item.slug}`}>
                     <img src={item.images[0].imageName} alt={item.title} />
                   </Link>
-                  <IconWrapper >
-                    <i className='fas fa-shopping-cart'></i>
-                  </IconWrapper>
+                  {
+                    <IconWrapper onClick={(e) => {addToCart(e, item.id, accessToken)}}>
+                        {/* <i className='fas fa-shopping-cart' > Add To Cart</i> */}
+                        <FontAwesomeIcon icon={faShoppingCart}/>
+                    </IconWrapper>
+                    
+                  }
                 
                 </ImgContainer>
                 <Bottom>
@@ -154,8 +180,9 @@ const Products = () => {
                     <PriceLabel>${item.unitPrice[0].sellingPrice}</PriceLabel>
                   </Price>
                 </Bottom>
-              </ProductItem>
+              </ProductItem>  
           ))}
+          
         </Wrapper>
       )}
     </section>

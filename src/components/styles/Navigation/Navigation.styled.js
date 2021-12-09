@@ -62,7 +62,7 @@ export const Label = styled.label`
 
 export const LinkWrapper = styled(Link)`
   display: inline-block;
-  margin: 0.5rem 1rem 0 0;
+  margin: 0.5 1rem 0 0;
   position: relative;
   z-index: 1;
 

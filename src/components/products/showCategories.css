@@ -1,0 +1,32 @@
+.categories-container {
+  border: 1px solid red;
+  padding: 20px;
+  margin-bottom: 1rem;
+  margin-right: 50px;
+}
+
+.categories-container h2 {
+  text-align: center;
+  padding: 10px;
+  letter-spacing: 1px;
+}
+
+.categories-container ul li {
+  list-style: none;
+  color: rgb(88, 80, 80);
+  font-weight: 700;
+  margin-bottom: 12px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.subCategories {
+    margin-left: 1.5rem;
+    color: rgb(73, 73, 73);
+  }
+.main-categories ul:hover,
+.main-categories li:hover {
+  color: red;
+}
+
+

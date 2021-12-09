@@ -6,7 +6,10 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
-  REMOVE_SELECTED_PRODUCT
+  REMOVE_SELECTED_PRODUCT,
+  GET_ALL_PRODUCTS_FAIL,
+  GET_ALL_PRODUCTS_SUCCESS,
+  GET_ALL_PRODUCTS_REQUEST
 } from '../constants/productConstants'
 
 const headers  = {
@@ -64,3 +67,21 @@ export const removeSelectedProduct = () => {
     type: REMOVE_SELECTED_PRODUCT,
   };
 };
+
+export const getAllProducts = () => async dispatch => {
+  try {
+    dispatch({ type: GET_ALL_PRODUCTS_REQUEST })
+
+    const response= await foodAPI.get('/api/v4/product', headers)
+
+    dispatch({
+      type: GET_ALL_PRODUCTS_SUCCESS,
+      payload: response.data.data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_ALL_PRODUCTS_FAIL,
+      payload: error
+    })
+  }
+}

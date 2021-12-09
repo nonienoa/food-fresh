@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-
+import foodAPI from '../../apis/foodAPI'
 import {
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
@@ -19,188 +19,214 @@ import {
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
-export const login = (email, password) => async dispatch => {
+export const fetchUserDetails = (accessToken) => async (dispatch) => {
   try {
-    dispatch({
-      type: USER_LOGIN_REQUEST,
-    })
-
-    const config = {
+     dispatch({ type:  USER_DETAILS_REQUEST });
+ 
+     const response = await foodAPI.get("/api/v4/profile/show",{
       headers: {
         'Content-Type': 'application/json',
-      },
-    }
+        'Warehouse-Id': '1',
+        Authorization: "Bearer " + accessToken,
+        'Api-key': 'fa63647e6ac4500d4ffdd413c77487dbc8acf22dc062bb76e8566deb01107545'
+      }});
+ 
+     dispatch({
+       type: USER_DETAILS_SUCCESS,
+       payload: response.data.data
+     });
+   } catch (error) {
+     dispatch({
+       type: USER_DETAILS_FAIL,
+       payload: error
+     });
+   }
+};
 
-    const { data } = await axios.post(
-      '/api/users/login',
-      { email, password },
-      config
-    )
 
-    if (data) {
-      toast.success('You have login successfully')
-    }
 
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    })
+// export const login = (email, password) => async dispatch => {
+//   try {
+//     dispatch({
+//       type: USER_LOGIN_REQUEST,
+//     })
 
-    localStorage.setItem('userInfo', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: USER_LOGIN_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     }
 
-    toast.error(
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    )
-  }
-}
+//     const { data } = await axios.post(
+//       '/api/users/login',
+//       { email, password },
+//       config
+//     )
 
-export const register = (name, email, password) => async dispatch => {
-  try {
-    dispatch({
-      type: USER_REGISTER_REQUEST,
-    })
+//     if (data) {
+//       toast.success('You have login successfully')
+//     }
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
+//     dispatch({
+//       type: USER_LOGIN_SUCCESS,
+//       payload: data,
+//     })
 
-    const { data } = await axios.post(
-      '/api/users',
-      { name, email, password },
-      config
-    )
+//     localStorage.setItem('userInfo', JSON.stringify(data))
+//   } catch (error) {
+//     dispatch({
+//       type: USER_LOGIN_FAIL,
+//       payload:
+//         error.response && error.response.data.message
+//           ? error.response.data.message
+//           : error.message,
+//     })
 
-    if (data) {
-      toast.success('You have login successfully')
-    }
+//     toast.error(
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     )
+//   }
+// }
 
-    dispatch({
-      type: USER_REGISTER_SUCCESS,
-      payload: data,
-    })
+// export const register = (name, email, password) => async dispatch => {
+//   try {
+//     dispatch({
+//       type: USER_REGISTER_REQUEST,
+//     })
 
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    })
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     }
 
-    localStorage.setItem('userInfo', JSON.stringify(data))
-  } catch (error) {
-    dispatch({
-      type: USER_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
+//     const { data } = await axios.post(
+//       '/api/users',
+//       { name, email, password },
+//       config
+//     )
 
-    toast.error(
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    )
-  }
-}
+//     if (data) {
+//       toast.success('You have login successfully')
+//     }
 
-export const getUserDetails = id => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_DETAILS_REQUEST,
-    })
+//     dispatch({
+//       type: USER_REGISTER_SUCCESS,
+//       payload: data,
+//     })
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+//     dispatch({
+//       type: USER_LOGIN_SUCCESS,
+//       payload: data,
+//     })
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+//     localStorage.setItem('userInfo', JSON.stringify(data))
+//   } catch (error) {
+//     dispatch({
+//       type: USER_REGISTER_FAIL,
+//       payload:
+//         error.response && error.response.data.message
+//           ? error.response.data.message
+//           : error.message,
+//     })
 
-    const { data } = await axios.get(`/api/users/${id}`, config)
+//     toast.error(
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     )
+//   }
+// }
 
-    dispatch({
-      type: USER_DETAILS_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: USER_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
+// export const getUserDetails = id => async (dispatch, getState) => {
+//   try {
+//     dispatch({
+//       type: USER_DETAILS_REQUEST,
+//     })
 
-    toast.error(
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    )
-  }
-}
+//     const {
+//       userLogin: { userInfo },
+//     } = getState()
 
-export const updateUserProfile = user => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_UPDATE_PROFILE_REQUEST,
-    })
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     }
 
-    const {
-      userLogin: { userInfo },
-    } = getState()
+//     const { data } = await axios.get(`/api/users/${id}`, config)
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+//     dispatch({
+//       type: USER_DETAILS_SUCCESS,
+//       payload: data,
+//     })
+//   } catch (error) {
+//     dispatch({
+//       type: USER_DETAILS_FAIL,
+//       payload:
+//         error.response && error.response.data.message
+//           ? error.response.data.message
+//           : error.message,
+//     })
 
-    const { data } = await axios.put(`/api/users/profile`, user, config)
+//     toast.error(
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     )
+//   }
+// }
 
-    if (data) {
-      toast.success('User Profile Updated Successfully')
-    }
+// export const updateUserProfile = user => async (dispatch, getState) => {
+//   try {
+//     dispatch({
+//       type: USER_UPDATE_PROFILE_REQUEST,
+//     })
 
-    dispatch({
-      type: USER_UPDATE_PROFILE_SUCCESS,
-      payload: data,
-    })
-  } catch (error) {
-    dispatch({
-      type: USER_UPDATE_PROFILE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    })
+//     const {
+//       userLogin: { userInfo },
+//     } = getState()
 
-    toast.error(
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message
-    )
-  }
-}
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${userInfo.token}`,
+//       },
+//     }
 
-export const logout = () => async dispatch => {
-  localStorage.removeItem('userInfo')
-  dispatch({ type: USER_LOGOUT })
-  dispatch({ type: USER_DETAILS_RESET })
-  dispatch({ type: ORDER_LIST_MY_RESET })
-}
+//     const { data } = await axios.put(`/api/users/profile`, user, config)
+
+//     if (data) {
+//       toast.success('User Profile Updated Successfully')
+//     }
+
+//     dispatch({
+//       type: USER_UPDATE_PROFILE_SUCCESS,
+//       payload: data,
+//     })
+//   } catch (error) {
+//     dispatch({
+//       type: USER_UPDATE_PROFILE_FAIL,
+//       payload:
+//         error.response && error.response.data.message
+//           ? error.response.data.message
+//           : error.message,
+//     })
+
+//     toast.error(
+//       error.response && error.response.data.message
+//         ? error.response.data.message
+//         : error.message
+//     )
+//   }
+// }
+
+// export const logout = () => async dispatch => {
+//   localStorage.removeItem('userInfo')
+//   dispatch({ type: USER_LOGOUT })
+//   dispatch({ type: USER_DETAILS_RESET })
+//   dispatch({ type: ORDER_LIST_MY_RESET })
+// }

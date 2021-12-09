@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from 'react-router-dom'
 
 
-export const NavLink = styled(Link)`
+export const NavItemLink = styled(Link)`
   color: var(--black);
   font-size: 1.5rem;
   padding: 0.9rem 1.5rem;
@@ -29,11 +29,11 @@ export const NavLink = styled(Link)`
   }
 `
 
-export const DropMenu = styled.ul`
+export const NavDropMenu = styled.ul`
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
   width: 20rem;
   top: 8.5rem;
-  line-height: 4.5rem;
+  line-height: 3.5rem;
   position: absolute;
   background-color: var(--white);
   opacity: 0;
@@ -52,13 +52,13 @@ export const DropMenu = styled.ul`
   }
 `
 
-export const DropItem = styled.li`
+export const NavDropItem = styled.li`
   @media (max-width: 996px) {
     margin: 0;
   }
 `
 
-export const DropLink = styled(Link)`
+export const NavDropLink = styled(Link)`
   display: block;
   font-size: 1.5rem;
   width: 100%;
@@ -76,7 +76,7 @@ export const DropLink = styled(Link)`
   }
 `
 
-export const MegaMenu = styled.div`
+export const NavMegaMenu = styled.div`
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 8.5rem;
@@ -99,7 +99,7 @@ export const MegaMenu = styled.div`
     transition: all 300ms ease;
   }
 `
-export const Content = styled.div`
+export const NavContent = styled.div`
   padding: 2.5rem 2rem;
   display: flex;
   width: 100%;
@@ -111,7 +111,7 @@ export const Content = styled.div`
   }
 `
 
-export const Row = styled.div`
+export const NavRow = styled.div`
   width: calc(25% - 3rem);
   line-height: 4.5rem;
 
@@ -132,12 +132,12 @@ export const Row = styled.div`
     }
   }
 `
-export const Header = styled.header`
+export const NavHeader = styled.header`
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--grey1);
 `
-export const MegaList = styled.ul`
+export const NavMegaList = styled.ul`
   border-left: 1px solid rgba(255, 255, 255, 0.09);
   margin-left: -4rem;
 
@@ -147,7 +147,7 @@ export const MegaList = styled.ul`
   }
 `
 
-export const MegaItem = styled.li`
+export const NavMegaItem = styled.li`
   padding: 0 2rem;
 
   @media (max-width: 996px) {
@@ -155,7 +155,7 @@ export const MegaItem = styled.li`
   }
 `
 
-export const MegaLink = styled(Link)`
+export const NavMegaLink = styled(Link)`
   padding: 0 2rem;
   display: block;
   font-size: 1.5rem;
@@ -171,13 +171,13 @@ export const NavItemWrapper = styled.li`
     color: var(--grey2);
   }
 
-  :hover ${DropMenu} {
+  :hover ${NavDropMenu} {
     opacity: 1;
     visibility: visible;
     top: 6.5rem;
   }
 
-  :hover ${MegaMenu} {
+  :hover ${NavMegaMenu} {
     opacity: 1;
     visibility: visible;
     top: 6.5rem;
@@ -188,15 +188,15 @@ export const NavItemWrapper = styled.li`
   }
 `
 
-export const Input = styled.input`
+export const NavInput = styled.input`
   display: none;
 
-  :checked ~ ${DropMenu},:checked ~ ${MegaMenu} {
+  :checked ~ ${NavDropMenu},:checked ~ ${NavMegaMenu} {
     max-height: 100%;
   }
 `
 
-export const Label = styled.label`
+export const NavLabel = styled.label`
   display: none;
 
   span {

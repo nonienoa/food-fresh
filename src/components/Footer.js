@@ -91,19 +91,19 @@ const Footer = () => {
               <span>
                 <i className='fas fa-map-marker-alt'></i>
               </span>
-              42 Dream House, Dreammy street, 7131 Dreamville, USA
+              EKBana Solutions, Kupondole, Lalitpur
             </div>
             <div>
               <span>
                 <i className='far fa-envelope'></i>
               </span>
-              company@gmail.com
+              ekbana@ekbana.com
             </div>
             <div>
               <span>
                 <i className='fas fa-phone'></i>
               </span>
-              456-456-4512
+              98456878963
             </div>
             <div className='payment-methods'>
               <img src='/images/payment.png' alt='' />

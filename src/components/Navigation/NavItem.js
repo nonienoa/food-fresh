@@ -1,94 +1,78 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import {
-  NavLink,
-  DropMenu,
-  DropItem,
-  DropLink,
-  MegaMenu,
-  Content,
-  Row,
-  Header,
-  MegaList,
-  MegaItem,
-  MegaLink,
+  NavItemLink,
+  NavDropMenu,
+  NavDropItem,
+  NavDropLink,
+  NavMegaMenu,
+  NavContent,
+  NavRow,
+  NavHeader,
+  NavMegaList,
+  NavMegaItem,
+  NavMegaLink,
   NavItemWrapper,
-  Input,
-  Label,
+  NavInput,
+  NavLabel,
 } from "../styles/Navigation/NavItem.styled"; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
+const showIcon = () => {
+  return (
+    // <i className='fas fa-chevron-down'></i>
+    <FontAwesomeIcon icon={faChevronDown} />
 
+  )
+}
 
 const NavItem = ( {item, setMenu }) => {
   return (
     <NavItemWrapper>
-      <NavLink
-        to={item.path}
-        className={item.class}
-        onClick={() => setMenu(false)}
-      >
-        {item.title}
-        <span>{item.subMenu && item.icon}</span>
-        <span>{item.megaMenu && item.icon}</span>
-      </NavLink>
-      {item.subMenu && (
+
+      {
+        (item.slug === '/') ? (
+          <NavItemLink
+            to="/"
+            className={item.title}
+            onClick={() => setMenu(false)}
+          >
+            {item.title}
+            <span>{item.subcategories.length > 0 ? (showIcon()) : (<></>)}</span>
+          </NavItemLink>
+        ) :
+        (
+          <NavItemLink
+            to={ `/products/category/${item.slug}`}
+            className={item.title}
+            onClick={() => setMenu(false)}
+          >
+            {item.title}
+            <span>{item.subcategories.length > 0 ? (showIcon()) : (<></>)}</span>
+          </NavItemLink>
+        )
+      }
+      {item.subcategories.length > 0 && (
         <>
-          <Input type='checkbox' id={item.label} />
-          <Label htmlFor={item.label}>
+          <NavInput type='checkbox' id={item.title} />
+          <NavLabel htmlFor={item.title}>
             {item.title}
             <span>
-              <i className='fas fa-chevron-down'></i>
+              {/* <i className='fas fa-chevron-down'></i> */}
+              <FontAwesomeIcon icon={faChevronDown} />
             </span>
-          </Label>
+          </NavLabel>
 
-          <DropMenu>
-            {item.subMenu.map((item, index) => {
+          <NavDropMenu>
+            {item.subcategories.map((item, index) => {
               return (
-                <DropItem key={index} onClick={() => setMenu(false)}>
-                  <DropLink to={item.path}>{item.title}</DropLink>
-                </DropItem>
+                <NavDropItem key={index} onClick={() => setMenu(false)}>
+                  <NavDropLink to={ `/products/category/${item.slug}`}>{item.title}</NavDropLink>
+                </NavDropItem>
               )
             })}
-          </DropMenu>
-        </>
-      )}
-
-      {item.megaMenu && (
-        <>
-          <Input type='checkbox' id={item.label} />
-          <Label htmlFor={item.label}>
-            {item.title}
-            <span>
-              <i className='fas fa-chevron-down'></i>
-            </span>
-          </Label>
-          <MegaMenu>
-            <Content>
-              <Row>
-                <img src='/images/woman.jpg' alt='' />
-              </Row>
-              {item.megaMenu.map((item, index) => {
-                return (
-                  <Row key={index}>
-                    <Header>{item.title}</Header>
-                    <MegaList>
-                      <MegaItem>
-                        {item.subItem.map((item, index) => (
-                          <MegaLink
-                            to={item.path}
-                            key={index}
-                            onClick={() => setMenu(false)}
-                          >
-                            {item.title}
-                          </MegaLink>
-                        ))}
-                      </MegaItem>
-                    </MegaList>
-                  </Row>
-                )
-              })}
-            </Content>
-          </MegaMenu>
+          </NavDropMenu>
         </>
       )}
     </NavItemWrapper>

@@ -5,6 +5,7 @@ const intialState = {
   categories: [],
 };
 
+
 export const categoriesReducer = (state = {intialState, isLoaded: false}, { type, payload }) => {
   switch (type) {
     case FETCH_CATEGORIES_REQUEST:

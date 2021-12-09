@@ -5,7 +5,10 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
-  REMOVE_SELECTED_PRODUCT
+  REMOVE_SELECTED_PRODUCT,
+  GET_ALL_PRODUCTS_FAIL,
+  GET_ALL_PRODUCTS_SUCCESS,
+  GET_ALL_PRODUCTS_REQUEST
 } from '../constants/productConstants'
 
 export const productListReducer = (state = { homeData: [] }, action) => {
@@ -34,6 +37,19 @@ export const productDetailsReducer = (
       return { loading: false, error: action.payload }
     case REMOVE_SELECTED_PRODUCT:
       return { }
+    default:
+      return state
+  }
+}
+
+export const getAllProductsReducer = (state = { products: [], isLoaded: false}, action) => {
+  switch (action.type) {
+    case GET_ALL_PRODUCTS_REQUEST:
+      return { isLoaded: false, products: [] }
+    case GET_ALL_PRODUCTS_SUCCESS:
+      return { isLoaded: true, products: action.payload }
+    case GET_ALL_PRODUCTS_FAIL:
+      return { isLoaded: true, error: action.payload }
     default:
       return state
   }

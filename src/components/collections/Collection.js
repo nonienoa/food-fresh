@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import styled from 'styled-components'
+import CustomLoader from '../../components/CustomLoader'
+import Alert from '../Alert'
+import Message from '../Message'
 
 import CollectionData from './CollectionData'
 import {FaArrowCircleRight } from "react-icons/fa";
@@ -108,8 +111,9 @@ const CollectionCount = styled.p`
 
 
 const Collection = () => {
+  const [loading, setLoading] = useState(true)
   const [category, setCategory]= useState([]);
-    console.log(category);
+    // console.log(category);
 
     useEffect(()=>{
         fetch("https://uat.ordering-boafresh.ekbana.net/api/v4/category", {
@@ -125,7 +129,7 @@ const Collection = () => {
             })
             .then(data=>{
                 setCategory(data.data);
-
+                setLoading(false)
             })
             .catch(err=>{
                 console.log(err);
@@ -138,20 +142,33 @@ const Collection = () => {
         title='Shop By Categories'
         subtitle='Select from the premium product and save plenty money'
       />
-      <Wrapper className='container'>
+      {loading ? (
+        <CustomLoader type='Oval' width={40} height={40} />
+      ) 
+      // : error ? (
+      //   <>
+      //     {' '}
+      //     <Alert type='danger' message={error} title='' />{' '}
+      //     <Message type='warning' message={error} />{' '}
+      //   </>
+      // ) 
+      : (
+        <Wrapper className='container'>
         {category.map((item) => (
           <CollectionItem key={item.id}>
             <img src={item.icon} alt="" />
             <CollectionContent>
               <CollectionTitle>
-                <Link to="/">{item.title}</Link>
+                <Link to={`/products/category/${item.slug}`}>{item.title}</Link>
               </CollectionTitle>
               <CollectionCount>{item.productCount} products</CollectionCount>
-              <CollectionLink to="/">SHOP NOW <FaArrowCircleRight style={{color:"red"}}/></CollectionLink>
+              <CollectionLink to={`/products/category/${item.slug}`}>SHOP NOW <FaArrowCircleRight style={{color:"red"}}/></CollectionLink>
             </CollectionContent>
           </CollectionItem>
         ))}
       </Wrapper>
+      )}
+      
     </section>
   )
 }

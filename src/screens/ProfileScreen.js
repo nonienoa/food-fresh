@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
+import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { useCookies } from 'react-cookie';
 import CustomLoader from '../components/CustomLoader'
 import LittleMessage from '../components/LittleMessage'
 import { Top, Form, FormControl, Button } from './LoginScreen'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { listMyOrders } from '../actions/orderActions'
 import { Link } from 'react-router-dom'
+import { fetchUserDetails } from '../redux/actions/userActions'
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const Section = styled.section`
   padding: 15rem 0;
@@ -64,56 +68,165 @@ const LinkWrapper = styled(Link)`
   color: var(--white);
   border-radius: 0.5rem;
 `
+const ErrorMsg = styled.div`
+  color: red;
+`;
 
 const ProfileScreen = ({ history, location }) => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
 
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  useDocumentTitle("BoaFresh | Profile Page")
+  
+  const [profile, setProfile] = useState({
+    firstName: '',
+    lastName: '',
+    mobileNumber: '',
+    email: '',
+  });
 
-  const dispatch = useDispatch()
-  const userDetails = useSelector(state => state.userDetails)
-  const { loading, user } = userDetails
-
-  const userLogin = useSelector(state => state.userLogin)
-  const { userInfo } = userLogin
-
-  const orderListMy = useSelector(state => state.orderListMy)
-  const { error, loading: loadingOrders, orders } = orderListMy
+  const [cookies, removeCookie] = useCookies();
+  let accessToken = cookies.access_token;
+  const [loaded, setLoaded] = useState(false);
+  const [orderLoaded, setOrderLoaded] = useState(false);
+  const [submitted, setSubmitted] = useState(true);
+  const [orders, setOrders] = useState([])
 
   useEffect(() => {
-    if (!userInfo) {
-      history.push('/login')
+    const loadUser = async () => {
+      try {
+        const response = await axios.get(`https://uat.ordering-boafresh.ekbana.net/api/v4/profile/show`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Api-Key': 'fa63647e6ac4500d4ffdd413c77487dbc8acf22dc062bb76e8566deb01107545',
+          },
+        });
+        if (response.status === 200 ) {
+          setLoaded(true);
+          setProfile(response.data.data);
+        } else {
+          toast.error("Sorry. Cannot update your profile.")
+        }
+      } catch (err) {
+        toast.error(err)
+      }
+    };
+    loadUser();
+    
+  }, [accessToken]);
+
+  useEffect(() => {
+    const loadOrder = async () => {
+      try {
+        const response = await axios.get(`https://uat.ordering-boafresh.ekbana.net/api/v4/order`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Api-Key': 'fa63647e6ac4500d4ffdd413c77487dbc8acf22dc062bb76e8566deb01107545',
+          },
+        });
+        if (response.status === 200 ) {
+          setOrders(response.data.data);
+          setOrderLoaded(true);
+
+          console.log(orders, "show orders")
+        } else {
+          console.log("Cannot load orders")
+        }
+      } catch (err) {
+        toast.error(err)
+      }
+    };
+    loadOrder();
+    
+  }, [accessToken]);
+  
+  const handleInput = (e) => {
+    setProfile({ ...profile, [e.target.name]: e.target.value });
+  };
+
+
+  const updateProfile = async (e) => {
+    e.preventDefault();
+    const { firstName, lastName, mobileNumber } = profile;
+    const printError = (elemId, hintMsg) => {
+      document.getElementById(elemId).innerHTML = hintMsg;
+    };
+    var firstNameErr = true;
+    var lastNameErr = true;
+    var phoneErr = true;
+
+    // Validate first name
+    if (firstName == "") {
+      printError("firstNameErr", "Please enter your first name.");
     } else {
-      if (!user.name) {
-        dispatch(getUserDetails('profile'))
-        dispatch(listMyOrders())
+      var regex = /^[a-zA-Z\s]+$/;
+      if (regex.test(firstName) === false) {
+        printError("firstNameErr", "Please enter a valid first name.");
       } else {
-        setName(user.name)
-        setEmail(user.email)
+        printError("firstNameErr", "");
+        firstNameErr = false;
       }
     }
-  }, [userInfo, history, redirect, dispatch, user])
-
-  const submitHandler = e => {
-    e.preventDefault()
-    if (password !== passwordConfirm) {
-      toast.error('Passwords do not match')
+    // Validate last name
+    if (lastName == "") {
+      printError("lastNameErr", "Please enter your last name.");
     } else {
-      dispatch(
-        updateUserProfile({
-          id: user._id,
-          name,
-          email,
-          password,
-        })
-      )
+      var regex = /^[a-zA-Z\s]+$/;
+      if (regex.test(lastName) === false) {
+        printError("lastNameErr", "Please enter a valid last name.");
+      } else {
+        printError("lastNameErr", "");
+        lastNameErr = false;
+      }
     }
-  }
+    
+
+    // Validate phone number
+    if (mobileNumber == "") {
+      printError("phoneErr", "Please enter your phone number.");
+    } else {
+      var regex = /^[1-9]\d{9}$/;
+      if (regex.test(mobileNumber) === false) {
+        printError("phoneErr", "Please enter a valid 10 digit phone number.");
+      } else {
+        printError("phoneErr", "");
+        phoneErr = false;
+      }
+    }
+
+
+    if ((firstNameErr || lastNameErr || phoneErr) == true) {
+      return false;
+    } else {
+      setSubmitted(false);
+      await fetch(`https://uat.ordering-boafresh.ekbana.net/api/v4/profile`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Api-Key': 'fa63647e6ac4500d4ffdd413c77487dbc8acf22dc062bb76e8566deb01107545',
+        },
+        body: JSON.stringify({
+          'first-name': firstName,
+          'last-name': lastName,
+          'mobile-number': mobileNumber,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.errors) {
+            
+            toast.error(data.errors[0].message)
+         
+       } else {
+         console.log('Updated..');
+         toast.success("Profile was successfully updated.")
+       }
+        })
+        .catch((error) => console.log(error));
+    }
+  };
+
 
   return (
+   
     <Section>
       <Row className='container'>
         <Col>
@@ -123,96 +236,116 @@ const ProfileScreen = ({ history, location }) => {
               <h2>Update Profile</h2>
             </div>
           </Top>
-          {loading && loading ? (
+          {!loaded ? (
             <CustomLoader type='Oval' width={20} height={20} />
           ) : (
-            <Form onSubmit={submitHandler}>
+            <Form onSubmit={updateProfile}>
               <FormControl>
-                <label htmlFor=''>Name</label>
+                <label htmlFor=''>First Name</label>
                 <input
                   type='text'
-                  placeholder='Name'
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  name="firstName"
+                  placeholder='First Name'
+                  value={profile.firstName}
+                  onChange={handleInput}
                 />
+                <ErrorMsg id="firstNameErr"></ErrorMsg>
+              </FormControl>
+              <FormControl>
+                <label htmlFor=''>Last Name</label>
+                <input
+                  type='text'
+                  name="lastName"
+                  placeholder='Last Name'
+                  value={profile.lastName}
+                  onChange={handleInput}
+                />
+                <ErrorMsg id="lastNameErr"></ErrorMsg>
               </FormControl>
               <FormControl>
                 <label htmlFor=''>Email</label>
                 <input
                   type='email'
+                  name="email"
                   placeholder='Enter Email'
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  value={profile.email}
+                  onChange={handleInput}
+                  disabled
                 />
+                <ErrorMsg id="emailErr"></ErrorMsg>
               </FormControl>
               <FormControl>
-                <label htmlFor=''>Password</label>
+                <label htmlFor=''>Mobile Number</label>
                 <input
-                  type='password'
-                  placeholder='Password'
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
+                  type='text'
+                  name="mobileNumber"
+                  placeholder='Mobile Number'
+                  value={profile.mobileNumber}
+                  onChange={handleInput}
                 />
+                <ErrorMsg id="phoneErr"></ErrorMsg>
               </FormControl>
 
-              <FormControl>
-                <label htmlFor=''>Confirm Password</label>
-                <input
-                  type='password'
-                  placeholder='Confirm Password'
-                  value={passwordConfirm}
-                  onChange={e => setPasswordConfirm(e.target.value)}
-                />
-              </FormControl>
-
-              <Button type='submit'>Update</Button>
+              <Button>Update Profile</Button>
             </Form>
           )}
         </Col>
         <Col>
           <h1>My Orders</h1>
-          {loadingOrders ? (
-            <CustomLoader type='Oval' width={20} height={20} />
-          ) : error ? (
-            <LittleMessage type='warning' message={error} />
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <Th>ID</Th>
-                  <Th>Date</Th>
-                  <Th>Total</Th>
-                  <Th>Paid</Th>
-                  <Th>Delivered</Th>
-                  <Th></Th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map(order => (
-                  <tr key={order._id}>
-                    <Td>{order._id}</Td>
-                    <Td>{order.createdAt.substring(0, 10)}</Td>
-                    <Td>${order.totalPrice}</Td>
-                    <Td>
-                      {order.isPaid
-                        ? order.paidAt.substring(0, 10)
-                        : 'Not Paid'}
-                    </Td>
-                    <Td>
-                      {order.isDelivered
-                        ? order.deliveredAt.substring(0, 10)
-                        : 'Not Delivered'}
-                    </Td>
-                    <Td>
-                      <LinkWrapper to={`/orders/${order._id}`}>
-                        Details
-                      </LinkWrapper>
-                    </Td>
-                  </tr>
-                ))}
-              </tbody>
+          <>
+          <Table>
+                    <thead>
+                      <tr>
+                        <Th>ID</Th>
+                        <Th>Date</Th>
+                        <Th>Total</Th>
+                        <Th>Paid</Th>
+                        <Th>Status</Th>
+                        <Th>Action</Th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    {
+                      !orderLoaded ? (
+                        <>
+                          <CustomLoader type='Oval' width={20} height={20} />
+                          
+                        </>
+                      ): (
+                        <>
+                        {
+                          orders.map((order) => (
+                            <tr key={order.id}>
+                                  <Td>{order.id}</Td>
+                                  <Td>{order.orderDate}</Td>
+                                  <Td>Rs. {order.total}</Td>
+                                  <Td>
+                                    Not Paid
+                                  </Td>
+                                  <Td>
+                                    {order.status}
+                                  </Td>
+                                  <Td>
+                                    <LinkWrapper to={`/`}>
+                                      Details
+                                    </LinkWrapper>
+                                  </Td>
+                        </tr>
+                          ))
+                        }
+                        </>
+                      )
+                    }
+                        
+                      
+                    </tbody>
             </Table>
-          )}
+          
+          </>
+          
+            
+          
         </Col>
       </Row>
     </Section>
