@@ -119,9 +119,9 @@ const NavList = ({ menu, setMenu, count }) => {
           accessToken && accessToken !== 'undefined' ? (
             <LinkWrapper to='/cart'>
               <img src='/images/shoppingBag.svg' alt='' />
-              <small className='count d-flex'>
+              {/* <small className='count d-flex'>
               {count}
-              </small>
+              </small> */}
             </LinkWrapper>) : (
 
                   
