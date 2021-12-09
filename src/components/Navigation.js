@@ -58,18 +58,24 @@ const Navigation = () => {
         fetchAllProducts();
     }, [])
 
-    useEffect(() => {
+    // useEffect(() => {
     
-      dispatch(fetchAllCart(accessToken))
-    }, [dispatch, accessToken])
-
-    const cartData = useSelector(state => state.allCart)
-    const { cartItems , isLoaded } = cartData
-
-   isLoaded &&  console.log(cartItems.cartProducts.length, "cart")
+    //   dispatch(fetchAllCart(accessToken))
+    // }, [accessToken])
+    // const cartData = useSelector(state => state.allCart)
+    // const fetchCart = (accessToken) => {
+      
+    //   dispatch(fetchAllCart(accessToken))
+      
+    //   const { cartItems , isLoaded } = cartData
+  
+    //  isLoaded &&  console.log(cartItems.cartProducts.length, "cart")
+    // }
+    
+   
     // console.log(allProducts)
 
-  const cart = useSelector(state => state.cart)
+  // const cart = useSelector(state => state.cart)
   // const { cartItems } = cart
   // const count = cartItems.reduce((acc, item) => acc + item.qty, 0)
 
@@ -125,7 +131,7 @@ const Navigation = () => {
         </LogoWrapper>
         
 
-        <NavList menu={menu} setMenu={setMenu} count={isLoaded && cartItems.cartProducts.length} />
+        <NavList menu={menu} setMenu={setMenu} count={''} />
         <div className='right'>
           
         {
@@ -144,9 +150,9 @@ const Navigation = () => {
                 accessToken && accessToken !== 'undefined' ? (
                   <LinkWrapper to='/cart'>
                     <img src='/images/shoppingBag.svg' alt='' />
-                    <small className='count d-flex'>
+                    {/* <small className='count d-flex'>
                       {isLoaded && cartItems.cartProducts.length}
-                    </small>
+                    </small> */}
                   </LinkWrapper>
                 ): (
                   <LinkWrapper onClick={(e) => {toast.info('Please Login to view Cart')}}>
