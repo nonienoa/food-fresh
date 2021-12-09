@@ -50,7 +50,7 @@ function App() {
   return (
     <>
     {/* <ProductComponent /> */}
-      <ReactNotification />
+      {/* <ReactNotification /> */}
       <Grid>
         <Navigation />
         <Main>
