@@ -263,7 +263,7 @@ const ProductDetailsScreen = ({ match }) => {
                       </Left>
 
                       <Right>
-                        <CatLabel>Home/T-shirt</CatLabel>
+                        <CatLabel>Home/Product Details</CatLabel>
                         <Title>{item.title}</Title>
                         <Rating value={4} />
                         {/* <Price>${productDetail.price}</Price> */}
